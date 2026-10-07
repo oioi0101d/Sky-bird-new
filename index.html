@@ -7,67 +7,150 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0;touch-action:none}
-html,body{width:100%;height:100%;overflow:hidden;background:#70c5ce;font-family:Arial,sans-serif}
-#game{position:fixed;inset:0;width:100vw;height:100vh;display:block}
 
-#rotate{
- display:none;position:fixed;inset:0;z-index:9999;
- background:#111;color:white;align-items:center;justify-content:center;
- text-align:center;font-size:25px;font-weight:bold;padding:30px
+html,body{
+ width:100%;
+ height:100%;
+ overflow:hidden;
+ background:#70c5ce;
+ font-family:Arial,sans-serif;
 }
-@media(orientation:portrait){
- #rotate{display:flex}
- #menu,#gameOver,#score,#coinHud{visibility:hidden}
+
+#game{
+ position:fixed;
+ inset:0;
+ width:100vw;
+ height:100vh;
+ display:block;
 }
+
+/* =========================
+MENU
+========================= */
 
 #menu{
- position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;
- justify-content:center;align-items:center;
- background:linear-gradient(#58c8e8,#b9f2ff)
+ position:fixed;
+ inset:0;
+ z-index:10;
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+ align-items:center;
+ background:linear-gradient(#58c8e8,#b9f2ff);
 }
-#menu h1{color:white;font-size:clamp(45px,9vw,80px);text-shadow:4px 4px #333}
-#menu p{color:#333;font-weight:bold;margin:5px}
-#skins{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:1050px;padding:10px}
+
+#menu h1{
+ color:white;
+ font-size:clamp(45px,9vw,80px);
+ text-shadow:4px 4px #333;
+}
+
+#menu p{
+ color:#333;
+ font-weight:bold;
+ margin:5px;
+}
+
+#skins{
+ display:flex;
+ flex-wrap:wrap;
+ justify-content:center;
+ gap:8px;
+ max-width:1050px;
+ padding:10px;
+}
 
 .skin{
- min-width:125px;padding:10px;border:3px solid white;border-radius:12px;
- background:#222;color:white;font-size:16px;font-weight:bold
+ min-width:125px;
+ padding:10px;
+ border:3px solid white;
+ border-radius:12px;
+ background:#222;
+ color:white;
+ font-size:16px;
+ font-weight:bold;
 }
-.skin.selected{border-color:#ffe600;box-shadow:0 0 15px #ffe600}
-.skin.locked{opacity:.45}
+
+.skin.selected{
+ border-color:#ffe600;
+ box-shadow:0 0 15px #ffe600;
+}
+
+.skin.locked{
+ opacity:.45;
+}
 
 .button{
- margin-top:12px;padding:14px 42px;border:0;border-radius:15px;
- background:#35b84a;color:white;font-size:24px;font-weight:bold
+ margin-top:12px;
+ padding:14px 42px;
+ border:0;
+ border-radius:15px;
+ background:#35b84a;
+ color:white;
+ font-size:24px;
+ font-weight:bold;
 }
 
+/* =========================
+HUD
+========================= */
+
 #score{
- position:fixed;z-index:5;top:12px;left:50%;
- transform:translateX(-50%);display:none;color:white;
- font-size:clamp(30px,5vw,55px);font-weight:bold;text-shadow:4px 4px #333
+ position:fixed;
+ z-index:5;
+ top:12px;
+ left:50%;
+ transform:translateX(-50%);
+ display:none;
+ color:white;
+ font-size:clamp(30px,5vw,55px);
+ font-weight:bold;
+ text-shadow:4px 4px #333;
 }
+
 #coinHud{
- position:fixed;z-index:5;top:18px;left:20px;display:none;
- color:white;font-size:22px;font-weight:bold;text-shadow:3px 3px #333
+ position:fixed;
+ z-index:5;
+ top:18px;
+ left:20px;
+ display:none;
+ color:white;
+ font-size:22px;
+ font-weight:bold;
+ text-shadow:3px 3px #333;
 }
+
+/* =========================
+GAME OVER
+========================= */
+
 #gameOver{
- position:fixed;inset:0;z-index:20;display:none;flex-direction:column;
- justify-content:center;align-items:center;background:rgba(0,0,0,.6);color:white
+ position:fixed;
+ inset:0;
+ z-index:20;
+ display:none;
+ flex-direction:column;
+ justify-content:center;
+ align-items:center;
+ background:rgba(0,0,0,.6);
+ color:white;
 }
-#gameOver h2{font-size:clamp(45px,8vw,70px);text-shadow:4px 4px #000}
-#gameOver p{font-size:22px;margin:6px}
+
+#gameOver h2{
+ font-size:clamp(45px,8vw,70px);
+ text-shadow:4px 4px #000;
+}
+
+#gameOver p{
+ font-size:22px;
+ margin:6px;
+}
 </style>
 </head>
 
 <body>
 
 <canvas id="game"></canvas>
-
-<div id="rotate">
-📱<br><br>
-VIRE O CELULAR DE LADO<br>
-PARA JOGAR SKY BIRD
-</div>
 
 <div id="score">0</div>
 
@@ -121,27 +204,41 @@ function resize(){
  W=canvas.width=window.innerWidth;
  H=canvas.height=window.innerHeight;
 }
+
 resize();
 window.addEventListener("resize",resize);
 
 
 /* =========================
-ORIENTAÇÃO
+TELA CHEIA + LANDSCAPE
 ========================= */
 
 async function forceLandscape(){
 
  try{
-  if(document.documentElement.requestFullscreen &&
-     !document.fullscreenElement){
+
+  if(
+   document.documentElement.requestFullscreen &&
+   !document.fullscreenElement
+  ){
+
    await document.documentElement.requestFullscreen();
+
   }
+
  }catch(e){}
 
  try{
-  if(screen.orientation && screen.orientation.lock){
+
+  if(
+   screen.orientation &&
+   screen.orientation.lock
+  ){
+
    await screen.orientation.lock("landscape");
+
   }
+
  }catch(e){}
 
 }
@@ -240,8 +337,6 @@ const skins=[
   wing:"#d49b00",
   type:"newyear"
  },
-
- /* NOVA SKIN SONIC */
 
  {
   name:"🦔 Sonic",
@@ -1026,8 +1121,6 @@ function drawBird(){
  ctx.rotate(bird.rotation);
 
 
- /* FÊNIX */
-
  if(skin.type==="phoenix"){
 
   ctx.fillStyle="#ff7a00";
@@ -1045,8 +1138,6 @@ function drawBird(){
  }
 
 
- /* SOMBRIO */
-
  if(skin.type==="dark"){
 
   ctx.shadowColor="#8b55ff";
@@ -1054,8 +1145,6 @@ function drawBird(){
 
  }
 
-
- /* CORPO */
 
  ctx.fillStyle=skin.body;
 
@@ -1065,8 +1154,6 @@ function drawBird(){
 
  ctx.shadowBlur=0;
 
-
- /* ASA */
 
  ctx.fillStyle=skin.wing;
 
@@ -1085,8 +1172,6 @@ function drawBird(){
  ctx.fill();
 
 
- /* CAPA */
-
  if(skin.type==="hero"){
 
   ctx.fillStyle="#e21b23";
@@ -1101,8 +1186,6 @@ function drawBird(){
 
  }
 
-
- /* ROBÔ */
 
  if(skin.type==="robot"){
 
@@ -1133,8 +1216,6 @@ function drawBird(){
  }
 
 
- /* ALIEN */
-
  if(skin.type==="alien"){
 
   ctx.fillStyle="#111";
@@ -1155,8 +1236,6 @@ function drawBird(){
 
  }
 
-
- /* ROSQUINHA */
 
  if(skin.type==="donut"){
 
@@ -1205,8 +1284,6 @@ function drawBird(){
  }
 
 
- /* WAFFLE */
-
  if(skin.type==="waffle"){
 
   ctx.fillStyle="#d58b25";
@@ -1241,8 +1318,6 @@ function drawBird(){
 
  }
 
-
- /* NATAL */
 
  if(skin.type==="christmas"){
 
@@ -1292,8 +1367,6 @@ function drawBird(){
 
  }
 
-
- /* HALLOWEEN */
 
  if(skin.type==="halloween"){
 
@@ -1352,8 +1425,6 @@ function drawBird(){
  }
 
 
- /* ANO NOVO */
-
  if(skin.type==="newyear"){
 
   ctx.fillStyle="#7b4dff";
@@ -1404,11 +1475,7 @@ function drawBird(){
  }
 
 
- /* SONIC 🦔 */
-
  if(skin.type==="sonic"){
-
-  /* ESPINHOS */
 
   ctx.fillStyle="#075dcc";
 
@@ -1430,8 +1497,6 @@ function drawBird(){
   ctx.fill();
 
 
-  /* BARRIGA */
-
   ctx.fillStyle="#f2c27b";
 
   ctx.beginPath();
@@ -1446,8 +1511,6 @@ function drawBird(){
 
   ctx.fill();
 
-
-  /* SAPATO */
 
   ctx.fillStyle="#e3262e";
 
@@ -1466,8 +1529,6 @@ function drawBird(){
   ctx.fill();
 
 
-  /* FAIXA BRANCA */
-
   ctx.fillStyle="white";
 
   ctx.fillRect(
@@ -1479,8 +1540,6 @@ function drawBird(){
 
  }
 
-
- /* OLHO */
 
  ctx.fillStyle="white";
 
@@ -1511,8 +1570,6 @@ function drawBird(){
 
  ctx.fill();
 
-
- /* BICO */
 
  ctx.fillStyle="#ff8c00";
 
@@ -1635,4 +1692,4 @@ draw();
 </script>
 
 </body>
-</html>
+ </html>
